@@ -3,10 +3,14 @@ body{
   margin: 0;
   padding:0;
   font-family: 'Arial', sans-serif;
+  position:relative;
 }
 .page-container{
+  margin-top:50px;
   margin:auto;
   width: 90%;
+  position:relative;
+
 }
 
 
@@ -14,11 +18,21 @@ body{
 
 .nav-section{
   width:100%;
-  margin-top:10px;
+
+  box-shadow: 1px 2px 5px #b00196;
+  position:sticky;
+  top:0;
+  z-index:20;
+  background-color:white;
+
+}
+.nav-content{
+  width:90%;
+  margin:auto;
   display:flex;
   align-items:center;
+  padding:10px 0 ;
   justify-content:space-between;
-
 }
 .navbar-links{
  display:flex;
@@ -63,4 +77,86 @@ body{
 
 .nav-section .logo {
   width:200px;
+}
+
+.hero-section{
+  margin: 50px auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+.hero-style{
+  width:100%;
+  top:0;
+}
+.hero-content{
+  display:flex;
+  flex-direction:column;
+  position:absolute;
+  top:0;
+  z-index:10;
+  top:50px;
+  width:50%;
+  margin:-3rem auto;
+  align-items:center;
+}
+.hero-content h1{
+  color:white;
+  text-align:center;
+  font-size:2.4rem;
+}
+.hero-content p{
+  color:white;
+  text-align:center;
+}
+.hero-content button{
+  color:white;
+  background-image:linear-gradient(to bottom right , #26aade, #b00196 );
+  padding:10px 20px;
+  border-radius:10px;
+  font-size:1rem;
+  border:none;
+  transition:all ease-out 1s;
+  cursor:pointer;
+}
+.steps{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:-40px;
+}
+.steps h1{
+  font-weight:bold;
+  font-size:3rem;
+  background-image:linear-gradient(to left , #a089d7, #391c82 );
+  background-clip:text;
+  color:transparent;
+}
+.steps-items{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.step-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  border-redius:10px
+}
+.step-item div{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+}
+.step-item div img{
+  width:90%;
+}
+.step-item h1{
+  color
 }
