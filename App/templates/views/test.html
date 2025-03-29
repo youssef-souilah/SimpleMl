@@ -8,14 +8,65 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            display: flex;
             min-height: 100vh;
             transition: margin-left 0.5s ease-in-out;
+            overflow:hidden;
+
         }
+        main {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            transition: margin-left 0.5s ease-in-out;
+            overflow:hidden;
+        }
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            border-bottom:2px solid #b00196;
+          }
+        
+          .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
+        
+          .nav-logo {
+            height: 40px;
+            width: auto;
+          }
+        
+          .brand-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333333;
+          }
+        
+          .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
+        
+          .username {
+            font-weight: 500;
+            color: #555555;
+          }
+        
+          .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
 
         #sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
+            width: 300px;
+            background-image:linear-gradient(to bottom right , #26aade, #b00196 );
             color: white;
             height: 100vh;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -148,71 +199,181 @@
             opacity: 1;
         }
 
-        #main-content {
-            flex: 1;
-            padding: 30px;
-            background: #f5f7fa;
-            transition: margin-left 0.5s ease-in-out;
-        }
-
         /* Animation for content when sidebar collapses */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateX(-10px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
-        .content-card {
-            background: white;
+        
+        .main-content {
+            padding: 2rem;
+            overflow:scroll;
+            flex:1;
+            height:80vh;    
+          }
+        
+          .image-upload-section {
+            margin-bottom: 3rem;
+          }
+        
+          .image-upload-section h2 {
+            color: transparent;
+            background-image:linear-gradient(to right , #26aade, #b00196 );
+            background-clip:text;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+          }
+        
+          .image-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 1.5rem;
+          }
+        
+          .drop-zone {
+            position: relative;
+            height: 200px;
+            border: 2px dashed #ccc;
             border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease-out;
-        }
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            overflow: hidden;
+          }
+        
+          .drop-zone:hover {
+            border-color: #888;
+            background-color: #f0f0f0;
+          }
+        
+          .drop-zone.active {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+          }
+        
+          .drop-zone i {
+            font-size: 2rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+          }
+        
+          .drop-zone p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+          }
+        
+          .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+          }
+        
+          .preview-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            top: 0;
+            left: 0;
+          }
+        
+          .add-btn {
+            height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+          }
+        
+          .add-btn:hover {
+            border-color: #4CAF50;
+            color: #4CAF50;
+          }
+        
+          .add-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+          }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="sidebar">
-        <div id="sidebar-header">
-            <span class="logo">MyApp</span>
-            <button id="toggle-btn"><i class="fas fa-chevron-left"></i></button>
+    <nav class="main-nav">
+        <div class="nav-brand">
+          <img src="logo.png" alt="Company Logo" class="nav-logo">
         </div>
-        <a href="#" class="sidebar-item">
-            <i class="fas fa-home"></i>
-            <span class="sidebar-text">Dashboard</span>
-            <span class="tooltip">Dashboard</span>
-        </a>
-        <a href="#" class="sidebar-item">
-            <i class="fas fa-chart-line"></i>
-            <span class="sidebar-text">Analytics</span>
-            <span class="tooltip">Analytics</span>
-        </a>
-        <a href="#" class="sidebar-item">
-            <i class="fas fa-envelope"></i>
-            <span class="sidebar-text">Messages</span>
-            <span class="tooltip">Messages</span>
-        </a>
-        <a href="#" class="sidebar-item">
-            <i class="fas fa-cog"></i>
-            <span class="sidebar-text">Settings</span>
-            <span class="tooltip">Settings</span>
-        </a>
-        <a href="#" class="sidebar-item">
-            <i class="fas fa-user"></i>
-            <span class="sidebar-text">Profile</span>
-            <span class="tooltip">Profile</span>
-        </a>
-    </div>
-
-    <div id="main-content">
-        <div class="content-card">
-            <h1>Welcome to Your Dashboard</h1>
-            <p>Click the button in the sidebar to toggle it. Notice the smooth animations!</p>
-            <button id="content-btn" style="padding: 10px 15px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                Sample Button
-            </button>
+        
+        <div class="nav-user">
+          <span class="username">John Doe</span>
+          <img src="user-avatar.jpg" alt="User Profile" class="user-avatar">
         </div>
-    </div>
+      </nav>
+    <main>
+        <div id="sidebar">
+            <div id="sidebar-header">
+                <span class="logo">Images</span>
+                <button id="toggle-btn"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            
+        </div>
+    
+        <div class="main-content">
+            <section class="image-upload-section">
+              <h2>Cats Images</h2>
+              <div class="image-grid" id="cats-grid">
+                <!-- Default cat drop zone -->
+                <div class="drop-zone">
+                  <input type="file" accept="image/*" class="file-input">
+                  <div class="drop-zone-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop cat image or click to browse</p>
+                  </div>
+                  <img class="preview-image" style="display: none;">
+                </div>
+                <!-- Add button -->
+                <button class="add-btn" onclick="addDropZone('cats-grid')">
+                  <i class="fas fa-plus"></i> Add Cat
+                </button>
+              </div>
+            </section>
+          
+            <section class="image-upload-section">
+              <h2>Dogs Images</h2>
+              <div class="image-grid" id="dogs-grid">
+                <!-- Default dog drop zone -->
+                <div class="drop-zone">
+                  <input type="file" accept="image/*" class="file-input">
+                  <div class="drop-zone-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag & drop dog image or click to browse</p>
+                  </div>
+                  <img class="preview-image" style="display: none;">
+                </div>
+                <!-- Add button -->
+                <button class="add-btn" onclick="addDropZone('dogs-grid')">
+                  <i class="fas fa-plus"></i> Add Dog
+                </button>
+              </div>
+            </section>
+          </div>
+    </main>
+    
 
     <script>
         document.getElementById('toggle-btn').addEventListener('click', function() {
@@ -230,13 +391,91 @@
             }
         });
 
-        // Add animation to content button for demonstration
-        document.getElementById('content-btn').addEventListener('click', function() {
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 100);
-        });
+
+        // Initialize drop zones
+  document.querySelectorAll('.drop-zone').forEach(dropZone => {
+    setupDropZone(dropZone);
+  });
+
+  function setupDropZone(dropZone) {
+    const fileInput = dropZone.querySelector('.file-input');
+    const preview = dropZone.querySelector('.preview-image');
+    
+    // Handle file selection
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        const file = fileInput.files[0];
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            dropZone.querySelector('.drop-zone-content').style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+
+    // Drag and drop functionality
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      dropZone.classList.add('active');
+    }
+
+    function unhighlight() {
+      dropZone.classList.remove('active');
+    }
+
+    dropZone.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      fileInput.files = files;
+      fileInput.dispatchEvent(new Event('change'));
+    }
+  }
+
+  // Add new drop zone
+  function addDropZone(gridId) {
+    const grid = document.getElementById(gridId);
+    if (grid.querySelectorAll('.drop-zone').length >= 10) {
+      alert('Maximum 10 images allowed');
+      return;
+    }
+
+    const newDropZone = document.createElement('div');
+    newDropZone.className = 'drop-zone';
+    newDropZone.innerHTML = `
+      <input type="file" accept="image/*" class="file-input">
+      <div class="drop-zone-content">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag & drop image or click to browse</p>
+      </div>
+      <img class="preview-image" style="display: none;">
+    `;
+    
+    // Insert before the add button
+    grid.insertBefore(newDropZone, grid.lastElementChild);
+    setupDropZone(newDropZone);
+  }
     </script>
 </body>
 </html>
