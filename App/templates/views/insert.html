@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}SimpleML-App{% endblock  %}
+{% block styles %}
+<style>
+        
+    .image-grid-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .grid-section-title {
+        color: white;
+        font-size: 1.8rem;
+        margin: 30px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #eee;
+    }
+    
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+    
+    .grid-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        aspect-ratio: 1/1;
+    }
+    
+    .grid-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .grid-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        cursor: grab;
+    }
+    
+    .grid-image:active {
+        cursor: grabbing;
+    }
+
+    .main-content {
+        padding: 2rem;
+        overflow:scroll;
+        flex:1;
+        height:80vh;    
+    }
+    
+    .image-upload-section {
+        margin-bottom: 3rem;
+    }
+    
+    .image-upload-section h2 {
+        color: transparent;
+        background-image:linear-gradient(to right , #26aade, #b00196 );
+        background-clip:text;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+    
+    .upload-grid {
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 1.5rem;
+    }
+    
+    .drop-zone {
+        position: relative;
+        height: 200px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #f9f9f9;
+        overflow: hidden;
+    }
+    
+    .drop-zone.highlight {
+        border-color: #b00196;
+        background-color: #f0e6ef;
+    }
+    
+    .drop-zone i {
+        font-size: 2rem;
+        color: #777;
+        margin-bottom: 0.5rem;
+    }
+    
+    .drop-zone p {
+        margin: 0;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .file-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock  %}
+{% block scripts %}
+<script>
+        
+
+    // Initialize drop zones
+    document.querySelectorAll('.drop-zone').forEach(dropZone => {
+        setupDropZone(dropZone);
+    });
+
+    // Make source images draggable
+    document.querySelectorAll('.grid-image').forEach(img => {
+        setupDraggableImage(img);
+    });
+
+    function setupDraggableImage(img) {
+        img.addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain', img.src);
+            e.dataTransfer.setData('type', img.closest('.image-grid').id.includes('cat') ? 'cat' : 'dog');
+            img.classList.add('dragging');
+        });
+
+        img.addEventListener('dragend', function() {
+            img.classList.remove('dragging');
+        });
+    }
+
+    function setupDropZone(dropZone) {
+        const fileInput = dropZone.querySelector('.file-input');
+        const preview = dropZone.querySelector('.preview-image');
+        const dropZoneContent = dropZone.querySelector('.drop-zone-content');
+        const type = dropZone.dataset.type;
+        
+        // Handle file selection
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length) {
+                const file = fileInput.files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        dropZoneContent.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dropZone.classList.add('highlight');
+        }
+
+        function unhighlight() {
+            dropZone.classList.remove('highlight');
+        }
+
+        dropZone.addEventListener('drop', function(e) {
+            const draggedType = e.dataTransfer.getData('type');
+            if (draggedType !== type) {
+                alert(`Please drop ${type} images here`);
+                return;
+            }
+
+            const imgSrc = e.dataTransfer.getData('text/plain');
+            if (imgSrc) {
+                // Handle image drop from sidebar
+                //preview.src = imgSrc;
+                //preview.style.display = 'block';
+                //dropZoneContent.style.display = 'none';
+                // Create a File object from the image URL
+                fetch(imgSrc)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], `dropped-image.${blob.type.split('/')[1]}`, {type: blob.type});
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    fileInput.dispatchEvent(new Event('change'));
+                })
+                .catch(err => console.error('Error creating file:', err));
+            } else {
+                // Handle file drop
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+    }
+
+    // Add new drop zone
+    function addDropZone(gridId, type) {
+        const grid = document.getElementById(gridId);
+        if (grid.querySelectorAll('.drop-zone').length >= 10) {
+            alert('Maximum 10 images allowed');
+            return;
+        }
+
+        const newDropZone = document.createElement('div');
+        newDropZone.className = 'drop-zone';
+        newDropZone.dataset.type = type;
+        newDropZone.innerHTML = `
+            <input type="file" accept="image/*" class="file-input">
+            <div class="drop-zone-content">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & drop image or click to browse</p>
+            </div>
+            <img class="preview-image" style="display: none;">
+        `;
+        
+        // Insert before the add button
+        grid.insertBefore(newDropZone, grid.lastElementChild);
+        setupDropZone(newDropZone);
+    }
+</script>
+{% endblock  %}
+
+{% block content %}
+<main>
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <span class="logo">Images</span>
+            <button id="toggle-btn"><i class="fas fa-chevron-left"></i></button>
+        </div>
+        <div class="image-grid-container">
+            <!-- Cats Section -->
+            <h2 class="grid-section-title">Cats</h2>
+            <div class="image-grid" id="cats-source">
+                {% for item in data.cats %}
+                <div class="grid-item">
+                    <img src="{{ item }}"  class="grid-image" draggable="true">
+                  </div>
+                {% endfor %}
+              
+              
+            </div>
+          
+            <!-- Dogs Section -->
+            <h2 class="grid-section-title">Dogs</h2>
+            <div class="image-grid" id="dogs-source">
+                {% for item in data.dogs %}
+                <div class="grid-item">
+                    <img src="{{ item }}"  class="grid-image" draggable="true">
+                  </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Tester votre modèle</h1>
+    </div>  
+</main>
+{% endblock  %}
+
+    
+    
+
+    
