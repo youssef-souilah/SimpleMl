@@ -53,28 +53,14 @@
 
     .main-content {
         padding: 2rem;
-        overflow:scroll;
-        flex:1;
-        height:80vh;    
+        flex:2;
     }
-    
-    .image-upload-section {
-        margin-bottom: 3rem;
-    }
-    
-    .image-upload-section h2 {
+    .main-content h1 {
         color: transparent;
         background-image:linear-gradient(to right , #26aade, #b00196 );
         background-clip:text;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
     }
-    
-    .upload-grid {
-        display: grid;
-        grid-template-columns: repeat(4,1fr);
-        gap: 1.5rem;
-    }
+
     
     .drop-zone {
         position: relative;
@@ -122,6 +108,15 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+    }
+    .btn-classify{
+        padding:10px 20px;
+        color:white;
+        border:none;
+        background-image:linear-gradient(to right , #26aade, #b00196 );
+        border-radius:5px;
+        margin-top:5px;
+        cursor:pointer;
     }
 </style>
 {% endblock  %}
@@ -233,30 +228,7 @@
         });
     }
 
-    // Add new drop zone
-    function addDropZone(gridId, type) {
-        const grid = document.getElementById(gridId);
-        if (grid.querySelectorAll('.drop-zone').length >= 10) {
-            alert('Maximum 10 images allowed');
-            return;
-        }
-
-        const newDropZone = document.createElement('div');
-        newDropZone.className = 'drop-zone';
-        newDropZone.dataset.type = type;
-        newDropZone.innerHTML = `
-            <input type="file" accept="image/*" class="file-input">
-            <div class="drop-zone-content">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop image or click to browse</p>
-            </div>
-            <img class="preview-image" style="display: none;">
-        `;
-        
-        // Insert before the add button
-        grid.insertBefore(newDropZone, grid.lastElementChild);
-        setupDropZone(newDropZone);
-    }
+    
 </script>
 {% endblock  %}
 
@@ -269,7 +241,7 @@
         </div>
         <div class="image-grid-container">
             <!-- Cats Section -->
-            <h2 class="grid-section-title">Cats</h2>
+            <h2 class="grid-section-title">Chats</h2>
             <div class="image-grid" id="cats-source">
                 {% for item in data.cats %}
                 <div class="grid-item">
@@ -281,7 +253,7 @@
             </div>
           
             <!-- Dogs Section -->
-            <h2 class="grid-section-title">Dogs</h2>
+            <h2 class="grid-section-title">Chiens</h2>
             <div class="image-grid" id="dogs-source">
                 {% for item in data.dogs %}
                 <div class="grid-item">
@@ -294,6 +266,15 @@
 
     <div class="main-content">
         <h1>Tester votre modèle</h1>
+        <div class="drop-zone" data-type="cat">
+            <input type="file" accept="image/*" class="file-input">
+            <div class="drop-zone-content">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
+            </div>
+            <img class="preview-image" style="display: none;">
+          </div>
+        <button class="btn-classify">Classifier</button>
     </div>  
 </main>
 {% endblock  %}

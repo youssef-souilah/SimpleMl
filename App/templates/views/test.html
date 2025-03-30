@@ -298,7 +298,7 @@
         </div>
         <div class="image-grid-container">
             <!-- Cats Section -->
-            <h2 class="grid-section-title">Cats</h2>
+            <h2 class="grid-section-title">Chats</h2>
             <div class="image-grid" id="cats-source">
                 {% for item in data.cats %}
                 <div class="grid-item">
@@ -310,7 +310,7 @@
             </div>
           
             <!-- Dogs Section -->
-            <h2 class="grid-section-title">Dogs</h2>
+            <h2 class="grid-section-title">Chiens</h2>
             <div class="image-grid" id="dogs-source">
                 {% for item in data.dogs %}
                 <div class="grid-item">
@@ -323,39 +323,39 @@
 
     <div class="main-content">
         <section class="image-upload-section">
-          <h2>Cats Images</h2>
+          <h2>Chats</h2>
           <div class="upload-grid" id="cats-grid">
             <!-- Default cat drop zone -->
             <div class="drop-zone" data-type="cat">
               <input type="file" accept="image/*" class="file-input">
               <div class="drop-zone-content">
                 <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop cat image or click to browse</p>
+                <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
               </div>
               <img class="preview-image" style="display: none;">
             </div>
             <!-- Add button -->
             <button class="add-btn" onclick="addDropZone('cats-grid', 'cat')">
-              <i class="fas fa-plus"></i> Add Cat
+              <i class="fas fa-plus"></i> Ajouter 
             </button>
           </div>
         </section>
       
         <section class="image-upload-section">
-          <h2>Dogs Images</h2>
+          <h2>Chiens</h2>
           <div class="upload-grid" id="dogs-grid">
             <!-- Default dog drop zone -->
             <div class="drop-zone" data-type="dog">
               <input type="file" accept="image/*" class="file-input">
               <div class="drop-zone-content">
                 <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop dog image or click to browse</p>
+                <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
               </div>
               <img class="preview-image" style="display: none;">
             </div>
             <!-- Add button -->
             <button class="add-btn" onclick="addDropZone('dogs-grid', 'dog')">
-              <i class="fas fa-plus"></i> Add Dog
+              <i class="fas fa-plus"></i> Ajouter
             </button>
           </div>
         </section>

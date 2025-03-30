@@ -4,8 +4,7 @@ from django.http import HttpResponse
 # Create your views here.
 def index(request):
     return render(request,"views/index.html")
-def app(request):
-    data={
+data={
         'cats':[
             '/static/images/cats/cat1.jpeg',
             '/static/images/cats/cat2.jpeg',
@@ -31,6 +30,13 @@ def app(request):
             '/static/images/dogs/dog10.jpeg'
         ]
     }
+def test(request):
+    return render(request,"views/insert.html",{
+        'data':data
+    })
+    
+def app(request):
+    
     return render(request,"views/test.html",{
         'data':data
     })
