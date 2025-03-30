@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SimpleMl - Machine Learning Made Simple</title>
-  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="/static/css/index.css">
 </head>
 <body >
   <nav class="nav-section">
     <div class="nav-content">
-      <img src="../images/logoml-nobg.png" class="logo" alt="logo" />
-      <button>Get started</button>
+      <img src="/static/images/logoml-nobg.png" class="logo" alt="logo" />
+      <button id="nav-btn">Get started</button>
     </div>
 
     
@@ -59,6 +59,11 @@
       </section>  
   </div> 
     
-      
+      <script>
+        const btn=document.getElementById("nav-btn");
+        btn.addEventListener("click",(e)=>{
+          window.navigation.navigate("/app")
+        })
+      </script>
 </body>
 </html>

@@ -235,13 +235,12 @@
                 return;
             }
 
-            console.log(e.dataTransfer.getData('text/plain'))
             const imgSrc = e.dataTransfer.getData('text/plain');
             if (imgSrc) {
                 // Handle image drop from sidebar
-                preview.src = imgSrc;
-                preview.style.display = 'block';
-                dropZoneContent.style.display = 'none';
+                //preview.src = imgSrc;
+                //preview.style.display = 'block';
+                //dropZoneContent.style.display = 'none';
                 // Create a File object from the image URL
                 fetch(imgSrc)
                 .then(res => res.blob())
@@ -301,71 +300,23 @@
             <!-- Cats Section -->
             <h2 class="grid-section-title">Cats</h2>
             <div class="image-grid" id="cats-source">
-              <div class="grid-item">
-                <img src="../images/cats/cat1.jpeg" alt="Cat 1" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat2.jpeg" alt="Cat 2" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat3.jpeg" alt="Cat 3" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat4.jpeg" alt="Cat 4" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat5.jpeg" alt="Cat 5" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat6.jpeg" alt="Cat 6" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat7.jpeg" alt="Cat 7" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat8.jpeg" alt="Cat 8" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat9.jpeg" alt="Cat 9" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/cats/cat10.jpeg" alt="Cat 10" class="grid-image" draggable="true">
-              </div>
+                {% for item in data.cats %}
+                <div class="grid-item">
+                    <img src="{{ item }}"  class="grid-image" draggable="true">
+                  </div>
+                {% endfor %}
+              
+              
             </div>
           
             <!-- Dogs Section -->
             <h2 class="grid-section-title">Dogs</h2>
             <div class="image-grid" id="dogs-source">
-              <div class="grid-item">
-                <img src="../images/dogs/dog1.jpeg" alt="Dog 1" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog2.jpeg" alt="Dog 2" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog3.jpeg" alt="Dog 3" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog4.jpeg" alt="Dog 4" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog5.jpeg" alt="Dog 5" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog6.jpeg" alt="Dog 6" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog7.jpeg" alt="Dog 7" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog8.jpeg" alt="Dog 8" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog9.jpeg" alt="Dog 9" class="grid-image" draggable="true">
-              </div>
-              <div class="grid-item">
-                <img src="../images/dogs/dog10.jpeg" alt="Dog 10" class="grid-image" draggable="true">
-              </div>
+                {% for item in data.dogs %}
+                <div class="grid-item">
+                    <img src="{{ item }}"  class="grid-image" draggable="true">
+                  </div>
+                {% endfor %}
             </div>
         </div>
     </div>
