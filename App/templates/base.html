@@ -3,15 +3,42 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>
+            {% block  title %}
+            
+            {% endblock  %}
+        </title>
+        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
+        <link rel="stylesheet" href="/static/css/base.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+        {% block  styles %}
+            
+        {% endblock  %}
         
 
-        
-        <script src="" async defer></script>
+    </head>
+    <body>
+        <nav class="main-nav">
+            <div class="nav-brand">
+              <img src="/static/images/logoml-nobg.png" alt="Company Logo" class="nav-logo">
+            </div>
+            
+            <div class="nav-user">
+              <span class="username">John Doe</span>
+              <img src="user-avatar.jpg" alt="User Profile" class="user-avatar">
+            </div>
+        </nav>
+        <main>
+            {% block  content %}
+            
+            {% endblock  %}
+        </main>
+        <script src="/static/js/base.js"></script>
+        {% block  scripts %}
+            
+        {% endblock  %}
     </body>
 </html>
