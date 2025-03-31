@@ -3,7 +3,6 @@
 {% block title %}SimpleML-App{% endblock  %}
 {% block styles %}
 <style>
-        
     .image-grid-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -53,9 +52,9 @@
 
     .main-content {
         padding: 2rem;
-        overflow:scroll;
-        flex:1;
-        height:80vh;    
+        overflow: auto;
+        flex: 1;
+        height: 80vh;    
     }
     
     .image-upload-section {
@@ -64,33 +63,22 @@
     
     .image-upload-section h2 {
         color: transparent;
-        background-image:linear-gradient(to right , #26aade, #b00196 );
-        background-clip:text;
+        background-image: linear-gradient(to right, #26aade, #b00196);
+        background-clip: text;
+        -webkit-background-clip: text;
         margin-bottom: 1rem;
         font-size: 1.5rem;
     }
     
-    .upload-grid {
-        display: grid;
-        grid-template-columns: repeat(4,1fr);
-        gap: 1.5rem;
-    }
-    
     .drop-zone {
         position: relative;
-        height: 200px;
+        min-height: 200px;
         border: 2px dashed #ccc;
         border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         padding: 1rem;
-        text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
         background-color: #f9f9f9;
-        overflow: hidden;
     }
     
     .drop-zone.highlight {
@@ -98,13 +86,22 @@
         background-color: #f0e6ef;
     }
     
-    .drop-zone i {
+    .drop-zone-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 180px;
+    }
+    
+    .drop-zone-content i {
         font-size: 2rem;
         color: #777;
         margin-bottom: 0.5rem;
     }
     
-    .drop-zone p {
+    .drop-zone-content p {
         margin: 0;
         color: #666;
         font-size: 0.9rem;
@@ -114,38 +111,56 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        top: 0;
+        left: 0;
         opacity: 0;
         cursor: pointer;
+    }
+    
+    .preview-container {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .preview-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1/1;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     
     .preview-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        display: block;
     }
     
-    .add-btn {
-        height: 200px;
-        border: 2px dashed #ccc;
-        border-radius: 8px;
-        background: none;
+    .remove-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
+        background-color: rgba(255, 0, 0, 0.7);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        font-size: 12px;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         cursor: pointer;
-        transition: all 0.3s ease;
-        color: #666;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 2;
     }
     
-    .add-btn:hover {
-        border-color: #b00196;
-        color: #b00196;
-    }
-    
-    .add-btn i {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
+    .preview-item:hover .remove-btn {
+        opacity: 1;
     }
 
     .dragging {
@@ -153,144 +168,126 @@
         border: 2px dashed #b00196 !important;
     }
 </style>
-{% endblock  %}
+{% endblock %}
 {% block scripts %}
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.drop-zone').forEach(setupDropZone);
+        document.querySelectorAll('.grid-image').forEach(setupDraggableImage);
         
-
-    // Initialize drop zones
-    document.querySelectorAll('.drop-zone').forEach(dropZone => {
-        setupDropZone(dropZone);
+        // Toggle Sidebar
+        document.getElementById('toggle-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        });
     });
-
-    // Make source images draggable
-    document.querySelectorAll('.grid-image').forEach(img => {
-        setupDraggableImage(img);
-    });
-
+    
     function setupDraggableImage(img) {
         img.addEventListener('dragstart', function(e) {
             e.dataTransfer.setData('text/plain', img.src);
             e.dataTransfer.setData('type', img.closest('.image-grid').id.includes('cat') ? 'cat' : 'dog');
             img.classList.add('dragging');
         });
-
+    
         img.addEventListener('dragend', function() {
             img.classList.remove('dragging');
         });
     }
-
+    
     function setupDropZone(dropZone) {
         const fileInput = dropZone.querySelector('.file-input');
-        const preview = dropZone.querySelector('.preview-image');
+        const previewContainer = dropZone.querySelector('.preview-container');
         const dropZoneContent = dropZone.querySelector('.drop-zone-content');
         const type = dropZone.dataset.type;
         
-        // Handle file selection
+        let uploadedFiles = new DataTransfer();
+    
         fileInput.addEventListener('change', function() {
-            if (fileInput.files.length) {
-                const file = fileInput.files[0];
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                        dropZoneContent.style.display = 'none';
-                    };
-                    reader.readAsDataURL(file);
+            updateFiles(fileInput.files);
+        });
+    
+        function updateFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                if (!isDuplicate(files[i])) {
+                    uploadedFiles.items.add(files[i]);
                 }
             }
-        });
-
-        // Drag and drop functionality
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    
+            fileInput.files = uploadedFiles.files;
+    
+            dropZoneContent.style.display = uploadedFiles.files.length ? 'none' : 'flex';
+            previewContainer.innerHTML = '';
+            
+            [...uploadedFiles.files].forEach((file, i) => addImageToPreview(file, i));
         }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            dropZone.classList.add('highlight');
+    
+        function isDuplicate(newFile) {
+            return [...uploadedFiles.files].some(file => file.name === newFile.name);
         }
-
-        function unhighlight() {
-            dropZone.classList.remove('highlight');
+    
+        function addImageToPreview(file, index) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+                previewItem.dataset.index = index;
+    
+                const img = document.createElement('img');
+                img.className = 'preview-image';
+                img.src = e.target.result;
+    
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.addEventListener('click', function() {
+                    removeFile(index);
+                    previewItem.remove();
+                    if (!previewContainer.children.length) dropZoneContent.style.display = 'flex';
+                });
+    
+                previewItem.append(img, removeBtn);
+                previewContainer.appendChild(previewItem);
+            };
+            reader.readAsDataURL(file);
         }
-
+    
+        function removeFile(index) {
+            const dt = new DataTransfer();
+            [...uploadedFiles.files].forEach((file, i) => {
+                if (i !== index) dt.items.add(file);
+            });
+    
+            fileInput.files = dt.files;
+            uploadedFiles = dt;
+        }
+    
+        dropZone.addEventListener('dragover', e => e.preventDefault());
         dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
             const draggedType = e.dataTransfer.getData('type');
-            if (draggedType !== type) {
+            if (draggedType && draggedType !== type) {
                 alert(`Please drop ${type} images here`);
                 return;
             }
-
+    
             const imgSrc = e.dataTransfer.getData('text/plain');
             if (imgSrc) {
-                // Handle image drop from sidebar
-                //preview.src = imgSrc;
-                //preview.style.display = 'block';
-                //dropZoneContent.style.display = 'none';
-                // Create a File object from the image URL
                 fetch(imgSrc)
-                .then(res => res.blob())
-                .then(blob => {
-                    const file = new File([blob], `dropped-image.${blob.type.split('/')[1]}`, {type: blob.type});
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
-                    fileInput.files = dataTransfer.files;
-                    fileInput.dispatchEvent(new Event('change'));
-                })
-                .catch(err => console.error('Error creating file:', err));
+                    .then(res => res.blob())
+                    .then(blob => {
+                        const file = new File([blob], `dropped.${blob.type.split('/')[1]}`, { type: blob.type });
+                        updateFiles([file]);
+                    });
             } else {
-                // Handle file drop
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                fileInput.files = files;
-                fileInput.dispatchEvent(new Event('change'));
+                updateFiles(e.dataTransfer.files);
             }
         });
     }
-
-    // Add new drop zone
-    function addDropZone(gridId, type) {
-        const grid = document.getElementById(gridId);
-        if (grid.querySelectorAll('.drop-zone').length >= 10) {
-            alert('Maximum 10 images allowed');
-            return;
-        }
-
-        const newDropZone = document.createElement('div');
-        newDropZone.className = 'drop-zone';
-        newDropZone.dataset.type = type;
-        newDropZone.innerHTML = `
-            <input type="file" accept="image/*" class="file-input">
-            <div class="drop-zone-content">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Drag & drop image or click to browse</p>
-            </div>
-            <img class="preview-image" style="display: none;">
-        `;
-        
-        // Insert before the add button
-        grid.insertBefore(newDropZone, grid.lastElementChild);
-        setupDropZone(newDropZone);
-    }
+    
 </script>
-{% endblock  %}
+{% endblock %}
 
 {% block content %}
-<main>
+
     <div id="sidebar">
         <div id="sidebar-header">
             <span class="logo">Images</span>
@@ -302,11 +299,9 @@
             <div class="image-grid" id="cats-source">
                 {% for item in data.cats %}
                 <div class="grid-item">
-                    <img src="{{ item }}"  class="grid-image" draggable="true">
-                  </div>
+                    <img src="{{ item }}" class="grid-image" draggable="true">
+                </div>
                 {% endfor %}
-              
-              
             </div>
           
             <!-- Dogs Section -->
@@ -314,8 +309,8 @@
             <div class="image-grid" id="dogs-source">
                 {% for item in data.dogs %}
                 <div class="grid-item">
-                    <img src="{{ item }}"  class="grid-image" draggable="true">
-                  </div>
+                    <img src="{{ item }}" class="grid-image" draggable="true">
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -323,47 +318,28 @@
 
     <div class="main-content">
         <section class="image-upload-section">
-          <h2>Chats</h2>
-          <div class="upload-grid" id="cats-grid">
-            <!-- Default cat drop zone -->
+            <h2>Chats</h2>
             <div class="drop-zone" data-type="cat">
-              <input type="file" accept="image/*" class="file-input">
-              <div class="drop-zone-content">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
-              </div>
-              <img class="preview-image" style="display: none;">
+                <input type="file" accept="image/*" class="file-input" multiple>
+                <div class="drop-zone-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Faites glisser et déposez les images de chats ou cliquez pour parcourir</p>
+                </div>
+                <div class="preview-container"></div>
             </div>
-            <!-- Add button -->
-            <button class="add-btn" onclick="addDropZone('cats-grid', 'cat')">
-              <i class="fas fa-plus"></i> Ajouter 
-            </button>
-          </div>
         </section>
       
         <section class="image-upload-section">
-          <h2>Chiens</h2>
-          <div class="upload-grid" id="dogs-grid">
-            <!-- Default dog drop zone -->
+            <h2>Chiens</h2>
             <div class="drop-zone" data-type="dog">
-              <input type="file" accept="image/*" class="file-input">
-              <div class="drop-zone-content">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
-              </div>
-              <img class="preview-image" style="display: none;">
+                <input type="file" accept="image/*" class="file-input" multiple>
+                <div class="drop-zone-content">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Faites glisser et déposez les images de chiens ou cliquez pour parcourir</p>
+                </div>
+                <div class="preview-container"></div>
             </div>
-            <!-- Add button -->
-            <button class="add-btn" onclick="addDropZone('dogs-grid', 'dog')">
-              <i class="fas fa-plus"></i> Ajouter
-            </button>
-          </div>
         </section>
     </div>
-</main>
-{% endblock  %}
 
-    
-    
-
-    
+{% endblock %}
