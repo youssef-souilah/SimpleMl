@@ -274,7 +274,17 @@
                 fetch(imgSrc)
                     .then(res => res.blob())
                     .then(blob => {
-                        const file = new File([blob], `dropped.${blob.type.split('/')[1]}`, { type: blob.type });
+                        // Extract filename from URL (if possible)
+                        const urlParts = imgSrc.split('/');
+                        let originalName = urlParts[urlParts.length - 1];
+        
+                        // Ensure it has the correct extension
+                        const extension = blob.type.split('/')[1];
+                        if (!originalName.includes('.')) {
+                            originalName = `dropped.${extension}`;
+                        }
+        
+                        const file = new File([blob], originalName, { type: blob.type });
                         updateFiles([file]);
                     });
             } else {
