@@ -329,11 +329,11 @@
         </div>
     </div>
 
-    <div class="main-content">
+    <form method="POST" action="" class="main-content" enctype="multipart/form-data">
         <section class="image-upload-section">
             <h2>Chats</h2>
             <div class="drop-zone" data-type="cat">
-                <input type="file" accept="image/*" class="file-input" multiple>
+                <input name="cats" type="file" accept="image/*" class="file-input" multiple>
                 <div class="drop-zone-content">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Faites glisser et déposez les images de chats ou cliquez pour parcourir</p>
@@ -341,11 +341,10 @@
                 <div class="preview-container"></div>
             </div>
         </section>
-      
         <section class="image-upload-section">
             <h2>Chiens</h2>
             <div class="drop-zone" data-type="dog">
-                <input type="file" accept="image/*" class="file-input" multiple>
+                <input name="dogs" type="file" accept="image/*" class="file-input" multiple>
                 <div class="drop-zone-content">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Faites glisser et déposez les images de chiens ou cliquez pour parcourir</p>
@@ -353,6 +352,7 @@
                 <div class="preview-container"></div>
             </div>
         </section>
-    </div>
+        <input type="submit" value="Entrener" />
+    </form>
 
 {% endblock %}
