@@ -26,9 +26,8 @@ def test(request):
     
 def app(request):
     if request.method == "POST":
-        cats = request.FILES.getlist('cats')
-        dogs = request.FILES.getlist('dogs')
-        
+        cats = request.FILES.getlist('cats[]')
+        dogs = request.FILES.getlist('dogs[]')
         for img in cats:
             original_name = os.path.basename(img.name) 
             if Image.objects.filter(name=original_name).exists():
