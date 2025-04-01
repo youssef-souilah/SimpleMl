@@ -31,26 +31,31 @@ data={
             '/static/images/dogs/dog10.jpeg'
         ]
     }
+data_=Image.objects.all()
 def test(request):
+    print(data_)
     return render(request,"views/insert.html",{
-        'data':data
+        'data':data,
     })
     
 def app(request):
+    print(data_)
     if request.method == "POST":
-        images = request.FILES.getlist('cats')  # Get multiple uploaded files
+        cats = request.FILES.getlist('cats')
+        dogs = request.FILES.getlist('dogs')
         
-        for img in images:
-            # print(img)
-            original_name = os.path.basename(img.name)  # Get file name
+        for img in cats:
+            original_name = os.path.basename(img.name) 
             if Image.objects.filter(name=original_name).exists():
-                # print(f"File '{original_name}' already exists. Skipping...")
                 continue  
-            
-            # Save image if it's not a duplicate
-            Image.objects.create(image=img, name=original_name)
+            Image.objects.create(image=img, name=original_name,type=False)
+        for img in dogs:
+            original_name = os.path.basename(img.name) 
+            if Image.objects.filter(name=original_name).exists():
+                continue  
+            Image.objects.create(image=img, name=original_name,type=True)
 
-        # return redirect('app')  # Redirect to prevent form resubmission
+        
 
     # data = Image.objects.all()  # Fetch all images to display
     return render(request, "views/test.html", {'data': data})
