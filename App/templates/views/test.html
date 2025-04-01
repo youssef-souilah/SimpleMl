@@ -329,7 +329,8 @@
         </div>
     </div>
 
-    <form method="POST" action="" class="main-content" enctype="multipart/form-data">
+    <form method="POST" action="/app" class="main-content" enctype="multipart/form-data">
+        {% csrf_token %}
         <section class="image-upload-section">
             <h2>Chats</h2>
             <div class="drop-zone" data-type="cat">

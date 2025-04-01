@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from .models import Image
+import os
 # Create your views here.
 def index(request):
     return render(request,"views/index.html")
@@ -36,7 +37,20 @@ def test(request):
     })
     
 def app(request):
-    
-    return render(request,"views/test.html",{
-        'data':data
-    })
+    if request.method == "POST":
+        images = request.FILES.getlist('cats')  # Get multiple uploaded files
+        
+        for img in images:
+            # print(img)
+            original_name = os.path.basename(img.name)  # Get file name
+            if Image.objects.filter(name=original_name).exists():
+                # print(f"File '{original_name}' already exists. Skipping...")
+                continue  
+            
+            # Save image if it's not a duplicate
+            Image.objects.create(image=img, name=original_name)
+
+        # return redirect('app')  # Redirect to prevent form resubmission
+
+    # data = Image.objects.all()  # Fetch all images to display
+    return render(request, "views/test.html", {'data': data})
