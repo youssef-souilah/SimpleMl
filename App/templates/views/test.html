@@ -307,12 +307,13 @@
             <button id="toggle-btn"><i class="fas fa-chevron-left"></i></button>
         </div>
         <div class="image-grid-container">
+            
             <!-- Cats Section -->
             <h2 class="grid-section-title">Chats</h2>
             <div class="image-grid" id="cats-source">
-                {% for item in data.cats %}
+                {% for item in data.cat %}
                 <div class="grid-item">
-                    <img src="{{ item }}" class="grid-image" draggable="true">
+                    <img src="{{ item.image.url }}" class="grid-image" draggable="true">
                 </div>
                 {% endfor %}
             </div>
@@ -320,9 +321,9 @@
             <!-- Dogs Section -->
             <h2 class="grid-section-title">Chiens</h2>
             <div class="image-grid" id="dogs-source">
-                {% for item in data.dogs %}
+                {% for item in data.dog %}
                 <div class="grid-item">
-                    <img src="{{ item }}" class="grid-image" draggable="true">
+                    <img src="{{ item.image.url }}" class="grid-image" draggable="true">
                 </div>
                 {% endfor %}
             </div>

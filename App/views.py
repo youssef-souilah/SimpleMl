@@ -31,15 +31,23 @@ data={
             '/static/images/dogs/dog10.jpeg'
         ]
     }
-data_=Image.objects.all()
+
 def test(request):
-    print(data_)
     return render(request,"views/insert.html",{
         'data':data,
     })
     
+    
 def app(request):
-    print(data_)
+    images_grouped_by_type = Image.objects.all().order_by('type')
+    # Loop through grouped images and filter by type
+    images_by_type = {}
+    for image in images_grouped_by_type:
+        if image.type not in images_by_type:
+            images_by_type[image.type] = []
+        images_by_type[image.type].append(image)
+        
+    print(images_by_type)
     if request.method == "POST":
         cats = request.FILES.getlist('cats')
         dogs = request.FILES.getlist('dogs')
@@ -48,14 +56,14 @@ def app(request):
             original_name = os.path.basename(img.name) 
             if Image.objects.filter(name=original_name).exists():
                 continue  
-            Image.objects.create(image=img, name=original_name,type=False)
+            Image.objects.create(image=img, name=original_name,type="cat")
         for img in dogs:
             original_name = os.path.basename(img.name) 
             if Image.objects.filter(name=original_name).exists():
                 continue  
-            Image.objects.create(image=img, name=original_name,type=True)
+            Image.objects.create(image=img, name=original_name,type="dog")
 
         
 
     # data = Image.objects.all()  # Fetch all images to display
-    return render(request, "views/test.html", {'data': data})
+    return render(request, "views/test.html", {'data': images_by_type})
