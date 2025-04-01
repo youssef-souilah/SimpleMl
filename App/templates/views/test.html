@@ -56,6 +56,20 @@
         flex: 1;
         height: 80vh;    
     }
+    .main-content  button{
+        color:white;
+        background-image:linear-gradient(to bottom right , #26aade, #b00196 );
+        padding:10px 20px;
+        width:200px;
+        border-radius:10px;
+        border:none;
+        transition:all ease-out 1s;
+        cursor:pointer;
+    }
+    .main-content  button a{
+        color:white;
+        text-decoration:none;
+    }
     
     .image-upload-section {
         margin-bottom: 3rem;
@@ -295,7 +309,51 @@
             }
         });
     }
-    
+    document.getElementById('image-upload-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from refreshing the page
+
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const btnSubmit = document.getElementById('btn-submit');
+        const btnNext = document.getElementById('btn-next');
+        const btnContent = document.getElementById('btn-content');
+        loadingSpinner.style.display = 'block'; 
+        btnContent.style.display = 'none'; 
+        btnSubmit.disabled = true; 
+        
+        const formData = new FormData();
+
+        const catFiles = document.querySelector('input[name="cats"]').files;
+        const dogFiles = document.querySelector('input[name="dogs"]').files;
+
+        for (const file of catFiles) {
+            formData.append('cats[]', file); 
+        }
+
+        for (const file of dogFiles) {
+            formData.append('dogs[]', file);
+        }
+
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+
+        fetch('/app', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            setInterval(() => {
+                loadingSpinner.style.display = 'none'; 
+                btnContent.style.display = 'block'; 
+                btnSubmit.disabled = false; 
+                btnSubmit.style.display="none" ; 
+                btnNext.style.display="block" ; 
+            }, 3000); 
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
 </script>
 {% endblock %}
 
@@ -330,8 +388,9 @@
         </div>
     </div>
 
-    <form method="POST" action="/app" class="main-content" enctype="multipart/form-data">
+    <form method="POST" id="image-upload-form" action="/app" class="main-content" enctype="multipart/form-data">
         {% csrf_token %}
+        
         <section class="image-upload-section">
             <h2>Chats</h2>
             <div class="drop-zone" data-type="cat">
@@ -354,7 +413,15 @@
                 <div class="preview-container"></div>
             </div>
         </section>
-        <input type="submit" value="Entrener" />
+        <button id="btn-submit">
+            <span id="btn-content">Entrainer</span>
+            <div id="loading-spinner" style="display: none">
+                <i class="fas fa-spinner fa-spin"></i> Entraînement ...
+            </div>
+        </button>
+        <button id="btn-next" style="display:none;">
+            <a href="/app/test">Suivant ...</a>
+        </button>
     </form>
 
 {% endblock %}

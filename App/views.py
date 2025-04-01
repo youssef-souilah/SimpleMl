@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from .models import Image
 import os
 # Create your views here.
@@ -62,6 +62,10 @@ def app(request):
             if Image.objects.filter(name=original_name).exists():
                 continue  
             Image.objects.create(image=img, name=original_name,type="dog")
+            
+        return JsonResponse({
+            'message':"success"
+        })
 
         
 
