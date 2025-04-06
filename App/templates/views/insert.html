@@ -264,18 +264,19 @@
         </div>
     </div>
 
-    <div class="main-content">
+    <form method="post" action="/app/test" class="main-content">
+        {% csrf_token %}
         <h1>Tester votre modèle</h1>
         <div class="drop-zone" data-type="cat">
-            <input type="file" accept="image/*" class="file-input">
+            <input type="file" name="img" accept="image/*" class="file-input">
             <div class="drop-zone-content">
               <i class="fas fa-cloud-upload-alt"></i>
               <p>Faites glisser et déposez l'image du chat ou cliquez pour parcourir</p>
             </div>
             <img class="preview-image" style="display: none;">
           </div>
-        <button class="btn-classify">Classifier</button>
-    </div>  
+        <input  type="submit" value="Classifier" class="btn-classify" />
+    </form>  
 </main>
 {% endblock  %}
 

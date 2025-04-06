@@ -18,6 +18,11 @@ def get_images():
     return images_by_type
 
 def test(request):
+    if request.method=="POST":
+        img=request.FILES.get('img')
+        # print(os.path.basename(img.name))
+        print(request)
+        print(get_images())
     return render(request,"views/insert.html",{
         'data':get_images(),
     })
