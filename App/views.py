@@ -18,24 +18,30 @@ def get_images():
         images_by_type[image.type].append(image)
     return images_by_type
 
+
+def classify(img):
+    score = 50
+    label = "cat"
+    for label_key, image_list in get_images().items():
+        if label_key in img.name:
+            label = label_key
+            for image_name in image_list:
+                if image_name.name == img.name:
+                    score = random.randint(85, 99)
+                    return label, score
+            score = random.randint(60, 80)
+            return label, score
+    return label, score
+
 def test(request):
     if request.method=="POST":
         img=request.FILES.get('img')
-        score=50
-        label="chien"
-        for i,j in get_images().items():
-            if(i in img.name):
-                label=i
-                for k in j:
-                    if(k == img.name):
-                        scrore=random.randint(85,99)
-                        break
-                scrore=random.randint(60,80)
-                break
-        scrore=random.randint(50,55)
+        
+        label , score=classify(img)
+        
         return JsonResponse({
             'message':"success",
-            'scrore':scrore,
+            'score':score,
             'label':label
         })
     return render(request,"views/insert.html",{

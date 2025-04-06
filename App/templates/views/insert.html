@@ -262,7 +262,8 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert('done !')
+
+            alert(data.label+" by "+data.score)
             
         })
         .catch((error) => {
