@@ -228,6 +228,39 @@
         });
     }
 
+    document.getElementById('image-upload-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from refreshing the page
+
+        //const loadingSpinner = document.getElementById('loading-spinner');
+        //const btnSubmit = document.getElementById('btn-submit');
+        //const btnNext = document.getElementById('btn-next');
+        //const btnContent = document.getElementById('btn-content');
+        ///loadingSpinner.style.display = 'block'; 
+        //btnContent.style.display = 'none'; 
+        //btnSubmit.disabled = true; 
+        
+        const formData = new FormData();
+
+        const img = document.querySelector('input[name="img"]').files[0];
+
+        formData.append('img', img); 
+
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+
+        fetch('/app/test', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('done !')
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
     
 </script>
 {% endblock  %}
@@ -264,7 +297,7 @@
         </div>
     </div>
 
-    <form method="post" action="/app/test" class="main-content">
+    <form method="post" id="image-upload-form" action="/app/test" class="main-content">
         {% csrf_token %}
         <h1>Tester votre modèle</h1>
         <div class="drop-zone" data-type="cat">

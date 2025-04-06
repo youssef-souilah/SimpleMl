@@ -21,8 +21,11 @@ def test(request):
     if request.method=="POST":
         img=request.FILES.get('img')
         # print(os.path.basename(img.name))
-        print(request)
+        print(img)
         print(get_images())
+        return JsonResponse({
+            'message':"success"
+        })
     return render(request,"views/insert.html",{
         'data':get_images(),
     })
