@@ -111,6 +111,7 @@
     }
     .btn-classify{
         padding:10px 20px;
+        margin-right:20px;
         color:white;
         border:none;
         background-image:linear-gradient(to right , #26aade, #b00196 );
@@ -137,7 +138,6 @@
     function setupDraggableImage(img) {
         img.addEventListener('dragstart', function(e) {
             e.dataTransfer.setData('text/plain', img.src);
-            e.dataTransfer.setData('type', img.closest('.image-grid').id.includes('cat') ? 'cat' : 'dog');
             img.classList.add('dragging');
         });
 
@@ -195,11 +195,6 @@
         }
 
         dropZone.addEventListener('drop', function(e) {
-            const draggedType = e.dataTransfer.getData('type');
-            if (draggedType !== type) {
-                alert(`Please drop ${type} images here`);
-                return;
-            }
 
             const imgSrc = e.dataTransfer.getData('text/plain');
             if (imgSrc) {
@@ -238,15 +233,7 @@
     }
 
     document.getElementById('image-upload-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from refreshing the page
-
-        //const loadingSpinner = document.getElementById('loading-spinner');
-        //const btnSubmit = document.getElementById('btn-submit');
-        //const btnNext = document.getElementById('btn-next');
-        //const btnContent = document.getElementById('btn-content');
-        ///loadingSpinner.style.display = 'block'; 
-        //btnContent.style.display = 'none'; 
-        //btnSubmit.disabled = true; 
+        event.preventDefault(); 
         
         const formData = new FormData();
 
@@ -262,9 +249,9 @@
         })
         .then(response => response.json())
         .then(data => {
-
-            alert(data.label+" by "+data.score)
-            
+            let type=data.label=="cat"?"chat":"chien"
+            const result = document.getElementById('result');
+            result.innerText=type+" => "+data.score+" %"
         })
         .catch((error) => {
             console.error('Error:', error);
@@ -318,7 +305,10 @@
             </div>
             <img class="preview-image" style="display: none;">
           </div>
-        <input  type="submit" value="Classifier" class="btn-classify" />
+          <div style="display:flex ; align-items:center;" class="bottom">
+            <input  type="submit" value="Classifier" class="btn-classify" />
+            <div style="margin-left:20px ; color:transparent; background-clip:text;background-image:linear-gradient(to right , #26aade, #b00196 );" id="result" class="result"> </div>
+          </div>
     </form>  
 </main>
 {% endblock  %}
