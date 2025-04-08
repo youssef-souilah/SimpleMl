@@ -282,7 +282,7 @@
             e.preventDefault();
             const draggedType = e.dataTransfer.getData('type');
             if (draggedType && draggedType !== type) {
-                alert(`Please drop ${type} images here`);
+                alert(`Veuillez déposer des images des ${type=='cat'?"chats":"chiens"} ici !`);
                 return;
             }
     
