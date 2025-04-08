@@ -59,7 +59,85 @@
         </div>
       </section>  
   </div> 
-    
+      <footer class="footer">
+    <div class="footer-container">
+      <p>&copy; 2025 SimpleML. Tous droits réservés.</p>
+      <div class="footer-links">
+        <a href="#" id="about-link">À propos</a>
+        <a href="#" id="contact-link">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Popup À propos -->
+  <div class="about-popup" id="about-popup">
+    <div class="about-content">
+      <span class="close-btn" id="close-popup">&times;</span>
+      <h2>À propos de SimpleML</h2>
+      <p>
+        Notre application utilise l’intelligence artificielle pour détecter et classer des images 
+        de chats et de chiens. Grâce à un modèle entraîné, elle analyse les pixels de l’image 
+        et prédit s’il s’agit d’un chat ou d’un chien avec un haut niveau de précision. 
+        Aucun code requis — il suffit d’importer une image et laisser l’IA faire le travail !
+      </p>
+    </div>
+  </div>
+
+  <!-- Popup Contact -->
+  <div class="contact-popup" id="contact-popup">
+    <div class="contact-content">
+      <span class="close-btn" id="close-contact-popup">&times;</span>
+      <h2>Contactez-nous</h2>
+      <p>
+        Pour toute question, vous pouvez nous contacter à ces adresses e-mail :
+      </p>
+      <p>
+        <a href="mailto:rimoumami@gmail.com"><strong>rimoumami@gmail.com</strong></a><br>
+        <a href="mailto:souilah.youssef.0@gmail.com"><strong>souilah.youssef.0@gmail.com</strong></a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const aboutLink = document.getElementById("about-link");
+    const contactLink = document.getElementById("contact-link");
+    const aboutPopup = document.getElementById("about-popup");
+    const contactPopup = document.getElementById("contact-popup");
+    const closeAboutBtn = document.getElementById("close-popup");
+    const closeContactBtn = document.getElementById("close-contact-popup");
+
+    // Afficher le popup "À propos"
+    aboutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      aboutPopup.classList.add("show");
+    });
+
+    // Afficher le popup "Contact"
+    contactLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      contactPopup.classList.add("show");
+    });
+
+    // Fermer le popup "À propos"
+    closeAboutBtn.addEventListener("click", () => {
+      aboutPopup.classList.remove("show");
+    });
+
+    // Fermer le popup "Contact"
+    closeContactBtn.addEventListener("click", () => {
+      contactPopup.classList.remove("show");
+    });
+
+    // Fermer les popups si on clique en dehors du contenu
+    window.addEventListener("click", (e) => {
+      if (e.target === aboutPopup) {
+        aboutPopup.classList.remove("show");
+      }
+      if (e.target === contactPopup) {
+        contactPopup.classList.remove("show");
+      }
+    });
+  </script>
       <script>
         const btn=document.getElementById("nav-btn");
         btn.addEventListener("click",(e)=>{
