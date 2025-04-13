@@ -1,6 +1,141 @@
-<h2>Register</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SimpleML-Register</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      /* Global Styles */
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f0f2f5;  /* Light background color */
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      /* Form container */
+      form {
+        background-color: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px #26aade; /* Soft shadow for floating effect */
+        width: 100%;
+        max-width: 400px; /* Limit the width of the form */
+        text-align: center;
+      }
+
+      /* Form Fields */
+      form h2 {
+        color: transparent;
+        background-image: linear-gradient(to right, #26aade, #b00196);
+        -webkit-background-clip: text;
+        background-clip: text;
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      form p {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      form label {
+        display: block;
+        text-align: start;
+        margin-bottom: 8px;
+        color: transparent;
+        background-image: linear-gradient(to right, #26aade, #b00196);
+        -webkit-background-clip: text;
+        background-clip: text;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      form input[type="text"],
+      form input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ddd;  /* Light border */
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9; /* Light gray background for inputs */
+        box-sizing: border-box;
+      }
+
+      form input[type="text"]:focus,
+      form input[type="password"]:focus {
+        border-color: #b00196;  /* Accent border on focus */
+        outline: none;
+      }
+
+      /* Hide helper text */
+      .helptext {
+        display: none !important;
+      }
+
+      ul.errorlist {
+        display: none !important;
+      }
+
+      /* Hide password validation messages */
+      form ul {
+        display: none !important;
+      }
+
+      /* Submit Button */
+      form button {
+        background-image: linear-gradient(to right, #26aade, #b00196);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        font-size: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px 0 10px 0;
+        width: 100%;
+        transition: opacity 0.3s;
+      }
+
+      form button:hover {
+        opacity: 0.9;
+      }
+
+      form button:focus {
+        outline: none;
+      }
+
+      /* Link styling */
+      form a {
+        display: block;
+        text-decoration: none;
+        color: #26aade;
+        font-size: 16px;
+        margin-top: 10px;
+        transition: color 0.3s;
+      }
+
+      form a:hover {
+        color: #b00196;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post">
+      <h2>Register</h2>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Register</button>
+      <a href="/auth/login">Already have an account? Login</a>
+    </form>
+  </body>
+</html>

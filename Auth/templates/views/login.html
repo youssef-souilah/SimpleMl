@@ -1,6 +1,108 @@
-<h2>Login</h2>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SimpleML-Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      /* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f0f2f5;  /* Light background color */
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form container */
+form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px #26aade; /* Soft shadow for floating effect */
+  width: 100%;
+  max-width: 400px; /* Limit the width of the form */
+  text-align: center;
+}
+
+/* Form Fields */
+form h2 {
+  color: transparent;
+  background-image:linear-gradient(to right , #26aade, #b00196 );
+  background-clip:text;
+  font-size:3rem;
+  font-weight: bold;
+}
+form p {
+  margin-bottom: 20px;
+}
+
+form label {
+  display: block;
+  text-align: start;
+  margin-bottom: 8px;
+  color: transparent;
+  background-image:linear-gradient(to right , #26aade, #b00196 );
+  background-clip:text;
+  font-size: 20px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;  /* Light border */
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f9f9f9; /* Light gray background for inputs */
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+  border-color: #b00196;  /* Blue border on focus */
+  outline: none;
+}
+
+/* Submit Button */
+form button {
+  color: transparent;
+  background-image:linear-gradient(to right , #26aade, #b00196 );
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom:10px;
+  width: 100%;
+}
+
+
+form button:focus {
+  outline: none;
+}
+
+    </style>
+  </head>
+  <body>
+    
 <form method="post">
+  <h2>Login</h2>
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Login</button>
+  <a href="/auth/register">Registred !</a>
 </form>
+  </body>
+</html>
+
+
