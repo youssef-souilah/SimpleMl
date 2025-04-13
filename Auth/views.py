@@ -3,12 +3,14 @@ from django.contrib.auth.decorators import  user_passes_test
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from django.utils import translation
 
 def not_authenticated(user):
     return not user.is_authenticated
 
 @user_passes_test(not_authenticated, login_url='/')
 def register_view(request):
+    translation.activate('fr')
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -24,8 +26,8 @@ def register_view(request):
 # Custom Login View
 class CustomLoginView(LoginView):
     template_name = 'views/login.html'
-    
     def dispatch(self, request, *args, **kwargs):
+        translation.activate('fr')
         if request.user.is_authenticated:
             return redirect('/')  # or redirect_user(request.user)
         return super().dispatch(request, *args, **kwargs)
