@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
-from .models import Image
+from .models import Image , Train
 from django.contrib.auth.decorators import login_required, user_passes_test
 import os
 import random
@@ -63,17 +63,25 @@ def app(request):
     if request.method == "POST":
         cats = request.FILES.getlist('cats[]')
         dogs = request.FILES.getlist('dogs[]')
+        train = Train.objects.create(
+            user=request.user
+        )
         for img in cats:
-            original_name = os.path.basename(img.name) 
+            original_name = os.path.basename(img.name)
+            image="" 
             if Image.objects.filter(name=original_name).exists():
-                continue  
-            Image.objects.create(image=img, name=original_name,type="cat")
+                image = Image.objects.get(name=original_name)
+            else:
+                image=Image.objects.create(image=img, name=original_name,type="cat")
+            train.images.add(image)   
         for img in dogs:
             original_name = os.path.basename(img.name) 
+            image =""
             if Image.objects.filter(name=original_name).exists():
-                continue  
-            Image.objects.create(image=img, name=original_name,type="dog")
-            
+                image = Image.objects.get(name=original_name)
+            else:
+                image = Image.objects.create(image=img, name=original_name,type="dog")
+            train.images.add(image)
         return JsonResponse({
             'message':"success"
         })
