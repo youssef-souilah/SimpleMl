@@ -29,10 +29,14 @@
             <div class="nav-user">
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit">Logout</button>
+                    <button class="btn-logout" type="submit">Logout</button>
                 </form>
-              <span class="username">John Doe</span>
-              <img src="user-avatar.jpg" alt="User Profile" class="user-avatar">
+              <span class="username">
+                {% block username %}
+                
+                {% endblock  %}
+              </span>
+              <img src="/static/images/icons/user.png" alt="User Profile" class="user-avatar">
             </div>
         </nav>
         <main>

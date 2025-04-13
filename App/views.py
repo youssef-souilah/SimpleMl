@@ -54,6 +54,7 @@ def test(request):
         })
     return render(request,"views/insert.html",{
         'data':get_images(),
+        'user':request.user,
     })
     
     
@@ -77,4 +78,7 @@ def app(request):
             'message':"success"
         })
 
-    return render(request, "views/test.html", {'data': get_images()})
+    return render(request, "views/test.html", {
+        'data': get_images(),
+        'user':request.user,
+    })
