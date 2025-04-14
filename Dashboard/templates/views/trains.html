@@ -1,0 +1,75 @@
+{% extends "base-dashboard.html" %}
+{% block title %}SimpleML - Entraînements{% endblock %}
+{% block username %}{{ user.username }}{% endblock %}
+
+{% block styles %}
+<style>
+    .main-view {
+        font-family: 'Segoe UI', sans-serif;
+        flex: 1;
+        padding: 1rem;
+        background-color: #e6defa;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #333;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+    th, td {
+        padding: 16px 20px;
+        text-align: left;
+    }
+    thead {
+        background-color: #f0f2f5;
+    }
+    tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+    .count-badge {
+        background-color: #6c5ce7;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-view">
+    <h1>Liste des Entraînements</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom de l'entraînement</th>
+                <th>Utilisateur</th>
+                <th>Images utilisées</th>
+                <th>Date de création</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for train in trains %}
+            <tr>
+                <td>#{{ train.id }}-{{ train.user.username }} </td>
+                <td>{{ train.user.username }}</td>
+                <td><span class="count-badge">{{ train.image_count }}</span></td>
+                <td>{{ train.created_at|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucun entraînement trouvé.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

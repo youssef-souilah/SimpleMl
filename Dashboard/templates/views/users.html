@@ -1,0 +1,102 @@
+{% extends "base-dashboard.html" %}
+{% block title %}SimpleML-Utilisateurs{% endblock  %}
+{% block username %}{{user.username}}{% endblock  %}
+
+{% block styles %}
+    <style>
+          .main-view{
+            font-family: 'Segoe UI', sans-serif;
+            flex:1;
+            padding:1rem;
+            background-color:#e6defa;
+          }
+          h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #f0f2f5;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .admin {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .non-admin {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            tr {
+                margin-bottom: 1rem;
+            }
+            td {
+                padding: 10px;
+                border-bottom: 1px solid #eee;
+            }
+            thead {
+                display: none;
+            }
+        }
+    </style>
+{% endblock  %}
+{% block content %}
+<div class="main-view">
+    <h1>Liste des Utilisateurs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Email</th>
+                <th>Date d'inscription</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.date_joined|date:"d/m/Y" }}</td>
+                <td>
+                    {% if user.is_superuser or user.is_staff %}
+                        <span class="admin">Oui</span>
+                    {% else %}
+                        <span class="non-admin">Non</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Aucun utilisateur trouvé.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock  %}
