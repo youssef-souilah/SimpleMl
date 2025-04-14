@@ -68,25 +68,37 @@
 
 <div class="dashboard-cards">
     <div class="card">
-      <h3>Utilisateurs Totale</h3>
-      <p class="main-value">1500</p>
-      <p class="sub-info positive">+20.5% from last month</p>
+        <h3>Utilisateurs Totale</h3>
+        <p class="value">{{ total_users }}</p>
+        <p class="growth" style="color: {{ users_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
+            {{ users_growth }}% from last month
+        </p>
     </div>
+    
     <div class="card">
-      <h3>Entrainements Totale</h3>
-      <p class="main-value">120</p>
-      <p class="sub-info positive">+30.3% from last month</p>
+        <h3>Entraînements Totale</h3>
+        <p class="value">{{ total_trains }}</p>
+        <p class="growth" style="color: {{ trains_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
+            {{ trains_growth }}% from last month
+        </p>
     </div>
+    
     <div class="card">
-      <h3>Data sets</h3>
-      <p class="main-value">1500</p>
-      <p class="sub-info negative">-5.1% from last month</p>
+        <h3>Data sets</h3>
+        <p class="value">{{ total_datasets }}</p>
+        <p class="growth" style="color: {{ datasets_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
+            {{ datasets_growth }}% from last month
+        </p>
     </div>
+    
     <div class="card">
-      <h3>Images utilisées</h3>
-      <p class="main-value">550</p>
-      <p class="sub-info positive">+10.2% from last month</p>
+        <h3>Images utilisées</h3>
+        <p class="value">{{ total_images_used }}</p>
+        <p class="growth" style="color: {{ images_used_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
+            {{ images_used_growth }}% from last month
+        </p>
     </div>
+    
   </div>
 </div>
 {% endblock  %}

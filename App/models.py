@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 class Image (models.Model):
     name = models.TextField(unique=True)
     image = models.ImageField(upload_to="images")
-    type=models.TextField(null=False) #0 for cat & 1 for dog
+    type=models.TextField(null=False) 
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name 
     
