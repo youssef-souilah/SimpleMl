@@ -1,104 +1,178 @@
 {% extends "base-dashboard.html" %}
-{% block title %}SimpleML-Dashboard{% endblock  %}
-{% block username %}{{user.username}}{% endblock  %}
+{% block title %}SimpleML-Dashboard{% endblock %}
+{% block username %}{{user.username}}{% endblock %}
 
 {% block styles %}
-    <style>
-          .main-view{
-            font-family: 'Segoe UI', sans-serif;
-            flex:1;
-            padding:1rem;
-            background-color:#e6defa;
-          }
-          .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-          }
-          
-          .card {
-            background: #fff;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-          }
-          
-          .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-          }
-          
-          .card h3 {
-            font-size: 1rem;
-            color: #777;
-            margin-bottom: 12px;
-            font-weight: 500;
-          }
-          
-          .card .main-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #222;
-          }
-          
-          .card .sub-info {
-            font-size: 0.9rem;
-            margin-top: 10px;
-            font-weight: 500;
-          }
-          
-          .sub-info.positive {
-            color: #27ae60;
-          }
-          
-          .sub-info.negative {
-            color: #c0392b;
-          }
-          
-    </style>
-{% endblock  %}
+<style>
+    .main-view{
+        font-family: 'Segoe UI', sans-serif;
+        flex:1;
+        padding:1rem;
+        background-color:#e6defa;
+    }
+    .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .card {
+        background: #fff;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card h3 {
+        font-size: 1rem;
+        color: #777;
+        margin-bottom: 12px;
+        font-weight: 500;
+    }
+    
+    .card .main-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #222;
+    }
+    
+    .card .sub-info {
+        font-size: 0.9rem;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+    
+    .sub-info.positive {
+        color: #27ae60;
+    }
+    
+    .sub-info.negative {
+        color: #c0392b;
+    }
+    
+    /* Table styles */
+    .dashboard-table {
+        background: #fff;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        margin-top: 20px;
+    }
+    
+    .dashboard-table h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+    
+    .dashboard-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .dashboard-table th, 
+    .dashboard-table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .dashboard-table th {
+        font-weight: 600;
+        color: #666;
+        background-color: #f8f9fa;
+    }
+    
+    .dashboard-table tr:hover {
+        background-color: #f9f9f9;
+    }
+    
+    .count-badge {
+        background-color: #6c5ce7;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="main-view">
+    <!-- Stats Cards -->
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>Utilisateurs Totale</h3>
+            <p class="main-value">{{ total_users }}</p>
+            <p class="sub-info {% if users_growth >= 0 %}positive{% else %}negative{% endif %}">
+                {{ users_growth|floatformat:1 }}% vs mois dernier
+            </p>
+        </div>
+        
+        <div class="card">
+            <h3>Entraînements Totale</h3>
+            <p class="main-value">{{ total_trains }}</p>
+            <p class="sub-info {% if trains_growth >= 0 %}positive{% else %}negative{% endif %}">
+                {{ trains_growth|floatformat:1 }}% vs mois dernier
+            </p>
+        </div>
+        
+        <div class="card">
+            <h3>Data sets</h3>
+            <p class="main-value">{{ total_datasets }}</p>
+            <p class="sub-info {% if datasets_growth >= 0 %}positive{% else %}negative{% endif %}">
+                {{ datasets_growth|floatformat:1 }}% vs mois dernier
+            </p>
+        </div>
+        
+        <div class="card">
+            <h3>Images utilisées</h3>
+            <p class="main-value">{{ total_images_used }}</p>
+            <p class="sub-info {% if images_used_growth >= 0 %}positive{% else %}negative{% endif %}">
+                {{ images_used_growth|floatformat:1 }}% vs mois dernier
+            </p>
+        </div>
+    </div>
 
-
-<div class="dashboard-cards">
-    <div class="card">
-        <h3>Utilisateurs Totale</h3>
-        <p class="value">{{ total_users }}</p>
-        <p class="growth" style="color: {{ users_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
-            {{ users_growth }}% from last month
-        </p>
+    <!-- Top 10 Trainings Table -->
+    <div class="dashboard-table">
+        <h2>Top 10 des Entraînements (par nombre d'images)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Entraînement</th>
+                    <th>Utilisateur</th>
+                    <th>Images utilisées</th>
+                    <th>Date de création</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for train in top_trains %}
+                <tr>
+                    <td>#{{ train.id }}</td>
+                    <td>{{ train.user.username }}</td>
+                    <td><span class="count-badge">{{ train.image_count }}</span></td>
+                    <td>{{ train.created_at|date:"d/m/Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">Aucun entraînement trouvé.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    
-    <div class="card">
-        <h3>Entraînements Totale</h3>
-        <p class="value">{{ total_trains }}</p>
-        <p class="growth" style="color: {{ trains_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
-            {{ trains_growth }}% from last month
-        </p>
-    </div>
-    
-    <div class="card">
-        <h3>Data sets</h3>
-        <p class="value">{{ total_datasets }}</p>
-        <p class="growth" style="color: {{ datasets_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
-            {{ datasets_growth }}% from last month
-        </p>
-    </div>
-    
-    <div class="card">
-        <h3>Images utilisées</h3>
-        <p class="value">{{ total_images_used }}</p>
-        <p class="growth" style="color: {{ images_used_growth|floatformat:1|add:"0" >= 0|yesno:'green,red' }};">
-            {{ images_used_growth }}% from last month
-        </p>
-    </div>
-    
-  </div>
 </div>
-{% endblock  %}
+{% endblock %}

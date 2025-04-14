@@ -244,7 +244,7 @@
 
         formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
 
-        fetch('/app/test', {
+        fetch('/app/test/', {
             method: 'POST',
             body: formData
         })

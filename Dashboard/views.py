@@ -30,6 +30,10 @@ def dashboard(request):
     datasets_last_month = Image.objects.filter(created_at__gte=last_month).count()  # If you store created_at
     used_images_last_month = Train.objects.filter(created_at__gte=last_month).values('images').distinct().count()
 
+    top_trains = Train.objects.select_related('user') \
+                             .annotate(image_count=Count('images')) \
+                             .order_by('-image_count')[:10]
+    
     def get_growth(current, last):
         if last == 0:
             return 100.0 if current > 0 else 0.0
@@ -45,6 +49,7 @@ def dashboard(request):
         "trains_growth": get_growth(total_trains, total_trains - trains_last_month),
         "datasets_growth": get_growth(total_datasets, total_datasets - datasets_last_month),
         "images_used_growth": get_growth(total_images_used, total_images_used - used_images_last_month),
+        "top_trains": top_trains,
     }
     return render(request,"views/dashboard.html",context)
 
