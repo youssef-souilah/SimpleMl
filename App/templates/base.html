@@ -8,7 +8,6 @@
             
             {% endblock  %}
         </title>
-        
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/static/css/base.css">
@@ -17,15 +16,12 @@
         {% block  styles %}
             
         {% endblock  %}
-        
-
     </head>
     <body>
         <nav class="main-nav">
             <div class="nav-brand">
               <img src="/static/images/logoml-nobg.png" alt="Company Logo" class="nav-logo">
             </div>
-            
             <div class="nav-user">
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}

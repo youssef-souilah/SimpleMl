@@ -1,0 +1,208 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    transition: margin-left 0.5s ease-in-out;
+    overflow:hidden;
+}
+
+
+main {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    transition: margin-left 0.5s ease-in-out;
+    overflow:hidden;
+}
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    border-bottom:2px solid #b00196;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-logo {
+    height: 40px;
+    width: auto;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.username {
+    font-weight: 500;
+    color: #555555;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.nav-user form button{
+    background-image:linear-gradient(to bottom right , #26aade, #b00196 );
+    padding: 6px 20px;
+    border-radius:5px;
+    color:white;
+    cursor: pointer;
+    border:none;
+}
+
+#sidebar {
+    width: 300px;
+    background-image:linear-gradient(to bottom right , #26aade, #b00196 );
+    color: white;
+    height: 100vh;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+#sidebar.collapsed {
+    width: 70px;
+}
+
+#sidebar-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateX(0);
+}
+
+#sidebar.collapsed .logo {
+    opacity: 0;
+    transform: translateX(-20px);
+    width: 0;
+}
+
+#toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+#sidebar.collapsed #toggle-btn {
+    transform: rotate(180deg);
+}
+
+#toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: #3498db;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-item:hover::before {
+    transform: scaleY(1);
+}
+
+.sidebar-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 25px;
+}
+
+.sidebar-item i {
+    margin-right: 15px;
+    font-size: 20px;
+    transition: margin 0.3s ease;
+    min-width: 20px;
+    text-align: center;
+}
+
+#sidebar.collapsed .sidebar-item i {
+    margin-right: 0;
+}
+
+.sidebar-text {
+    white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateX(0);
+}
+
+#sidebar.collapsed .sidebar-text, #sidebar.collapsed .grid-section-title {
+    opacity: 0;
+    transform: translateX(-20px);
+    width: 0;
+    display: none;
+}
+
+.tooltip {
+    position: absolute;
+    left: 80px;
+    background: #2c3e50;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#sidebar.collapsed .sidebar-item:hover .tooltip {
+    opacity: 1;
+}
+
+/* Animation for content when sidebar collapses */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}

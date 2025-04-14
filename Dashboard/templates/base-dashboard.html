@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>
+            {% block  title %}
+            
+            {% endblock  %}
+        </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/static/css/dashboard/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="icon" type="image/png" href="/static/images/icon.png">
+        {% block  styles %}
+            
+        {% endblock  %}
+    </head>
+    <body >
+        <nav class="main-nav">     
+            <div class="nav-brand">
+              <img src="/static/images/logoml-nobg.png" alt="Company Logo" class="nav-logo">
+            </div>
+            <div class="nav-user">
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="btn-logout" type="submit">Logout</button>
+                </form>
+              <span class="username">
+                {% block username %}
+                
+                {% endblock  %}
+              </span>
+              <img src="/static/images/icons/user.png" alt="User Profile" class="user-avatar">
+            </div>
+        </nav>
+        <main>
+            <div id="sidebar">
+                <div id="sidebar-header">
+                    <span class="logo"></span>
+                    <button id="toggle-btn"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <a href="/dashboard/" class="sidebar-item">
+                    <i class="fas fa-home"></i>
+                    <span class="sidebar-text">Tableux de bord</span>
+                    <span class="tooltip">Tableux de bord</span>
+                </a>
+                <a href="/dashboard/users" class="sidebar-item">
+                    <i class="fas fa-user"></i>
+                    <span class="sidebar-text">Utilisateurs</span>
+                    <span class="tooltip">Utilisateurs</span>
+                </a>
+                <a href="/dashboard/trains" class="sidebar-item">
+                    <i class="fas fa-cog"></i>
+                    <span class="sidebar-text">Entrainements</span>
+                    <span class="tooltip">Entrainements</span>
+                </a>
+                <a href="/dashboard/images" class="sidebar-item">
+                    <i class="fas fa-database"></i>
+                    <span class="sidebar-text">Data set</span>
+                    <span class="tooltip">Messages</span>
+                </a>
+                <form class="sidebar-item" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <i class="fas fa-lock"></i>
+                    <button style="background-color:transparent;color:white;border:none;font-size:16px" class="sidebar-text" type="submit">Logout</button>
+                    <span class="tooltip">Déconnecter</span>
+                </form>
+            </div>
+            
+            {% block  content %}
+            
+            {% endblock  %}
+        </main>
+        <script src="/static/js/base.js"></script>
+        {% block  scripts %}
+            
+        {% endblock  %}
+    </body>
+</html>
