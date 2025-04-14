@@ -1,3 +1,92 @@
 {% extends "base-dashboard.html" %}
 {% block title %}SimpleML-Dashboard{% endblock  %}
 {% block username %}{{user.username}}{% endblock  %}
+
+{% block styles %}
+    <style>
+          .main-view{
+            font-family: 'Segoe UI', sans-serif;
+            flex:1;
+            padding:1rem;
+            background-color:#e6defa;
+          }
+          .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+          }
+          
+          .card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+          }
+          
+          .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+          }
+          
+          .card h3 {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 12px;
+            font-weight: 500;
+          }
+          
+          .card .main-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #222;
+          }
+          
+          .card .sub-info {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-weight: 500;
+          }
+          
+          .sub-info.positive {
+            color: #27ae60;
+          }
+          
+          .sub-info.negative {
+            color: #c0392b;
+          }
+          
+    </style>
+{% endblock  %}
+{% block content %}
+<div class="main-view">
+
+
+<div class="dashboard-cards">
+    <div class="card">
+      <h3>Utilisateurs Totale</h3>
+      <p class="main-value">1500</p>
+      <p class="sub-info positive">+20.5% from last month</p>
+    </div>
+    <div class="card">
+      <h3>Entrainements Totale</h3>
+      <p class="main-value">120</p>
+      <p class="sub-info positive">+30.3% from last month</p>
+    </div>
+    <div class="card">
+      <h3>Data sets</h3>
+      <p class="main-value">1500</p>
+      <p class="sub-info negative">-5.1% from last month</p>
+    </div>
+    <div class="card">
+      <h3>Images utilisées</h3>
+      <p class="main-value">550</p>
+      <p class="sub-info positive">+10.2% from last month</p>
+    </div>
+  </div>
+</div>
+{% endblock  %}
