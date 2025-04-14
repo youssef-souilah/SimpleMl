@@ -4,12 +4,24 @@
 
 {% block styles %}
 <style>
-    .main-view{
+    /* Main scrollable container */
+    .main-view-container {
         font-family: 'Segoe UI', sans-serif;
-        flex:1;
-        padding:1rem;
-        background-color:#e6defa;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 60px); /* Adjust based on your header height */
+        overflow-y: auto;
+        background-color: #e6defa;
     }
+    
+    /* Content wrapper */
+    .content-wrapper {
+        padding: 1.5rem;
+        min-height: min-content;
+    }
+
+    /* Dashboard cards */
     .dashboard-cards {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -61,18 +73,19 @@
         color: #c0392b;
     }
     
-    /* Table styles */
+    /* Table section */
     .dashboard-table {
         background: #fff;
         padding: 24px;
         border-radius: 16px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        margin-top: 20px;
+        margin-bottom: 20px;
     }
     
     .dashboard-table h2 {
         margin-bottom: 20px;
         color: #333;
+        font-size: 1.5rem;
     }
     
     .dashboard-table table {
@@ -91,6 +104,8 @@
         font-weight: 600;
         color: #666;
         background-color: #f8f9fa;
+        position: sticky;
+        top: 0;
     }
     
     .dashboard-table tr:hover {
@@ -106,73 +121,94 @@
         font-size: 0.85rem;
         display: inline-block;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .dashboard-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-cards {
+            grid-template-columns: 1fr;
+        }
+        
+        .content-wrapper {
+            padding: 1rem;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="main-view">
-    <!-- Stats Cards -->
-    <div class="dashboard-cards">
-        <div class="card">
-            <h3>Utilisateurs Totale</h3>
-            <p class="main-value">{{ total_users }}</p>
-            <p class="sub-info {% if users_growth >= 0 %}positive{% else %}negative{% endif %}">
-                {{ users_growth|floatformat:1 }}% vs mois dernier
-            </p>
+<div class="main-view-container">
+    <div class="content-wrapper">
+        <!-- Stats Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Utilisateurs Totale</h3>
+                <p class="main-value">{{ total_users }}</p>
+                <p class="sub-info {% if users_growth >= 0 %}positive{% else %}negative{% endif %}">
+                    {{ users_growth|floatformat:1 }}% vs mois dernier
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>Entraînements Totale</h3>
+                <p class="main-value">{{ total_trains }}</p>
+                <p class="sub-info {% if trains_growth >= 0 %}positive{% else %}negative{% endif %}">
+                    {{ trains_growth|floatformat:1 }}% vs mois dernier
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>Data sets</h3>
+                <p class="main-value">{{ total_datasets }}</p>
+                <p class="sub-info {% if datasets_growth >= 0 %}positive{% else %}negative{% endif %}">
+                    {{ datasets_growth|floatformat:1 }}% vs mois dernier
+                </p>
+            </div>
+            
+            <div class="card">
+                <h3>Images utilisées</h3>
+                <p class="main-value">{{ total_images_used }}</p>
+                <p class="sub-info {% if images_used_growth >= 0 %}positive{% else %}negative{% endif %}">
+                    {{ images_used_growth|floatformat:1 }}% vs mois dernier
+                </p>
+            </div>
         </div>
-        
-        <div class="card">
-            <h3>Entraînements Totale</h3>
-            <p class="main-value">{{ total_trains }}</p>
-            <p class="sub-info {% if trains_growth >= 0 %}positive{% else %}negative{% endif %}">
-                {{ trains_growth|floatformat:1 }}% vs mois dernier
-            </p>
-        </div>
-        
-        <div class="card">
-            <h3>Data sets</h3>
-            <p class="main-value">{{ total_datasets }}</p>
-            <p class="sub-info {% if datasets_growth >= 0 %}positive{% else %}negative{% endif %}">
-                {{ datasets_growth|floatformat:1 }}% vs mois dernier
-            </p>
-        </div>
-        
-        <div class="card">
-            <h3>Images utilisées</h3>
-            <p class="main-value">{{ total_images_used }}</p>
-            <p class="sub-info {% if images_used_growth >= 0 %}positive{% else %}negative{% endif %}">
-                {{ images_used_growth|floatformat:1 }}% vs mois dernier
-            </p>
-        </div>
-    </div>
 
-    <!-- Top 10 Trainings Table -->
-    <div class="dashboard-table">
-        <h2>Top 10 des Entraînements (par nombre d'images)</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Entraînement</th>
-                    <th>Utilisateur</th>
-                    <th>Images utilisées</th>
-                    <th>Date de création</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for train in top_trains %}
-                <tr>
-                    <td>#{{ train.id }}</td>
-                    <td>{{ train.user.username }}</td>
-                    <td><span class="count-badge">{{ train.image_count }}</span></td>
-                    <td>{{ train.created_at|date:"d/m/Y" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">Aucun entraînement trouvé.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Top 10 Trainings Table -->
+        <div class="dashboard-table">
+            <h2>Top 10 des Entraînements (par nombre d'images)</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Entraînement</th>
+                            <th>Utilisateur</th>
+                            <th>Images utilisées</th>
+                            <th>Date de création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for train in top_trains %}
+                        <tr>
+                            <td>#{{ train.id }}</td>
+                            <td>{{ train.user.username }}</td>
+                            <td><span class="count-badge">{{ train.image_count }}</span></td>
+                            <td>{{ train.created_at|date:"d/m/Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">Aucun entraînement trouvé.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
