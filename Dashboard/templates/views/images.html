@@ -1,0 +1,110 @@
+{% extends "base-dashboard.html" %}
+{% block title %}SimpleML-Images{% endblock %}
+{% block username %}{{ user.username }}{% endblock %}
+
+{% block styles %}
+<style>
+    .main-view {
+        font-family: 'Segoe UI', sans-serif;
+        flex: 1;
+        padding: 1rem;
+        background-color: #e6defa;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #333;
+    }
+
+    .table-container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .scrollable-body {
+        max-height: 400px; /* Adjust the height as needed */
+        overflow-y: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 16px 20px;
+        text-align: left;
+        word-break: break-word;
+    }
+
+    thead {
+        background-color: #f0f2f5;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+
+    img {
+        max-height: 50px;
+        border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .table-container {
+            border-radius: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-view">
+    <h1>Liste des Images</h1>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Nombre d’Entraînements</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="scrollable-body">
+            <table>
+                <tbody>
+                    {% for image in images %}
+                    <tr>
+                        <td><img src="{{ image.image.url }}" alt="{{ image.name }}"></td>
+                        <td>{{ image.name }}</td>
+                        <td>
+                            {% if image.type == "cat" %}
+                                Chat
+                            {% elif image.type == "dog" %}
+                                Chien
+                            {% else %}
+                                Inconnu
+                            {% endif %}
+                        </td>
+                        <td>{{ image.train_count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Aucune image trouvée.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
