@@ -312,8 +312,12 @@
     }
     document.getElementById('image-upload-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from refreshing the page
-
-        
+        const catFiles = document.querySelector('input[name="cats"]').files;
+        const dogFiles = document.querySelector('input[name="dogs"]').files;
+        if((catFiles.length<10|| dogFiles.length<10)|| (catFiles.length>10|| dogFiles.length>10)){
+            alert("les images doivent être 10 !!")
+            return;
+        }
         const loadingSpinner = document.getElementById('loading-spinner');
         const btnSubmit = document.getElementById('btn-submit');
         const btnNext = document.getElementById('btn-next');
@@ -323,11 +327,6 @@
         btnSubmit.disabled = true; 
         
         const formData = new FormData();
-
-        const catFiles = document.querySelector('input[name="cats"]').files;
-        const dogFiles = document.querySelector('input[name="dogs"]').files;
-
-        
 
         for (const file of catFiles) {
             formData.append('cats[]', file); 
