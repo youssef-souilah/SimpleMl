@@ -154,17 +154,17 @@
         display: block;
     }
     
-    .remove-btn {
+    .preview-container button {
         position: absolute;
         top: 8px;
         right: 8px;
-        width: 24px;
-        height: 24px;
-        background-color: rgba(255, 0, 0, 0.7);
+        width: 30px;
+        height: 30px;
+        background-color: red;
         border: none;
         border-radius: 50%;
         color: white;
-        font-size: 12px;
+        font-size: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -313,6 +313,7 @@
     document.getElementById('image-upload-form').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from refreshing the page
 
+        
         const loadingSpinner = document.getElementById('loading-spinner');
         const btnSubmit = document.getElementById('btn-submit');
         const btnNext = document.getElementById('btn-next');
@@ -325,6 +326,8 @@
 
         const catFiles = document.querySelector('input[name="cats"]').files;
         const dogFiles = document.querySelector('input[name="dogs"]').files;
+
+        
 
         for (const file of catFiles) {
             formData.append('cats[]', file); 
