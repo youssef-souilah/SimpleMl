@@ -27,7 +27,7 @@ def dashboard(request):
     # Growth % from last month
     users_last_month = User.objects.filter(date_joined__gte=last_month).count()
     trains_last_month = Train.objects.filter(created_at__gte=last_month).count()
-    datasets_last_month = Image.objects.filter(created_at__gte=last_month).count()  # If you store created_at
+    datasets_last_month = Image.objects.filter(created_at__gte=last_month).count() 
     used_images_last_month = Train.objects.filter(created_at__gte=last_month).values('images').distinct().count()
 
     top_trains = Train.objects.select_related('user') \

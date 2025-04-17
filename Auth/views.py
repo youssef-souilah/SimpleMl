@@ -29,7 +29,7 @@ class CustomLoginView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         translation.activate('fr')
         if request.user.is_authenticated:
-            return redirect('/')  # or redirect_user(request.user)
+            return redirect('/') 
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
